@@ -290,13 +290,11 @@
 
     <script>
         // === НАСТРОЙКИ SUPABASE ===
-        const SUPABASE_URL = 'https://ftrkosudfbdhzsfpqklf.supabase.co'; // Замените на ваш Project URL
-        const SUPABASE_KEY = 'ftrkosudfbdhzsfpqklf'; // Замените на ваш anon/public key
+        const SUPABASE_URL = 'https://ftrkosudfbdhzsfpqklf.supabase.co'; // Замените на ваш реальный Project URL
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0cmtvc3VkZmJkaHpzZnBxa2xmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg4NDQ2MDMsImV4cCI6MjA1NDQyMDYwM30.YOUR_ACTUAL_KEY_HERE'; // Замените на ваш настоящий anon/public key
         
-        const supabase = window.supabase.create({
-            url: SUPABASE_URL,
-            key: SUPABASE_KEY
-        });
+        // Правильное подключение через CDN
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // === ИНИЦИАЛИЗАЦИЯ ===
         document.addEventListener('DOMContentLoaded', async () => {
@@ -438,7 +436,7 @@
         // Обновление статистики
         async function updateStats(bookings, dateFilter) {
             // Статистика по всем бронированиям
-            const {  allBookings } = await supabase
+            const { data: allBookings } = await supabase
                 .from('bookings')
                 .select('id');
 
@@ -450,7 +448,7 @@
             document.getElementById('stat-today').textContent = todayCount;
 
             // Активные агенты
-            const {  agents } = await supabase
+            const { data: agents } = await supabase
                 .from('agents')
                 .select('id');
             document.getElementById('stat-agents').textContent = agents?.length || 0;
