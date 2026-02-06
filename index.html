@@ -404,9 +404,10 @@
     <script>
         // === НАСТРОЙКИ SUPABASE ===
         // ЗАМЕНИТЕ ЭТИ ЗНАЧЕНИЯ НА СВОИ ИЗ ПРОЕКТА SUPABASE!
-        const SUPABASE_URL = 'https://ftrkosudfbdhzsfpqklf.supabase.co'; // Замените на ваш Project URL
-        const SUPABASE_KEY = 'ftrkosudfbdhzsfpqklf'; // Замените на ваш anon/public key
+        const SUPABASE_URL = 'https://ftrkosudfbdhzsfpqklf.supabase.co'; // Замените на ваш реальный Project URL
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0cmtvc3VkZmJkaHpzZnBxa2xmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg4NDQ2MDMsImV4cCI6MjA1NDQyMDYwM30.YOUR_ACTUAL_KEY_HERE'; // Замените на ваш настоящий anon/public key
         
+        // Правильное подключение через CDN
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // === ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ===
@@ -490,7 +491,7 @@
         async function loadSlotsForDate(date) {
             try {
                 // Получаем все бронирования на эту дату
-                const {  bookings, error } = await supabase
+                const { data: bookings, error } = await supabase
                     .from('bookings')
                     .select('slot_time')
                     .eq('booking_date', date);
