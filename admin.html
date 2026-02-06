@@ -290,14 +290,16 @@
 
     <script>
         // === НАСТРОЙКИ SUPABASE ===
-        const SUPABASE_URL = 'https://ftrkosudfbdhzsfpqklf.supabase.co'; // Замените на ваш реальный Project URL
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0cmtvc3VkZmJkaHpzZnBxa2xmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg4NDQ2MDMsImV4cCI6MjA1NDQyMDYwM30.YOUR_ACTUAL_KEY_HERE'; // Замените на ваш настоящий anon/public key
+        const SUPABASE_URL = 'https://ftrkosudfbdhzsfpqklf.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
         
         // Правильное подключение через CDN
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // === ИНИЦИАЛИЗАЦИЯ ===
         document.addEventListener('DOMContentLoaded', async () => {
+            console.log('Админ-панель загружена');
+            
             // Загружаем список агентов для фильтра
             await loadAgentsForFilter();
             
@@ -317,13 +319,20 @@
         // Загрузка агентов для фильтра
         async function loadAgentsForFilter() {
             try {
+                console.log('Загрузка агентов для фильтра');
+                
                 const { data, error } = await supabase
                     .from('agents')
                     .select('id, name, code')
                     .order('name');
 
-                if (error) throw error;
+                if (error) {
+                    console.error('Ошибка загрузки агентов:', error);
+                    throw error;
+                }
 
+                console.log('Агенты загружены:', data.length);
+                
                 const select = document.getElementById('filter-agent');
                 data.forEach(agent => {
                     const option = document.createElement('option');
@@ -343,6 +352,8 @@
             tbody.innerHTML = '<tr><td colspan="8" class="loading">Загрузка...</td></tr>';
 
             try {
+                console.log('Загрузка бронирований');
+                
                 // Получаем фильтры
                 const dateFilter = document.getElementById('filter-date').value;
                 const agentFilter = document.getElementById('filter-agent').value;
@@ -373,7 +384,12 @@
 
                 const { data, error } = await query;
 
-                if (error) throw error;
+                if (error) {
+                    console.error('Ошибка Supabase:', error);
+                    throw error;
+                }
+
+                console.log('Бронирования загружены:', data ? data.length : 0);
 
                 // Обновляем статистику
                 updateStats(data, dateFilter);
@@ -436,11 +452,13 @@
         // Обновление статистики
         async function updateStats(bookings, dateFilter) {
             // Статистика по всем бронированиям
-            const { data: allBookings } = await supabase
+            const {  allBookings, error: error1 } = await supabase
                 .from('bookings')
                 .select('id');
 
-            document.getElementById('stat-total').textContent = allBookings?.length || 0;
+            if (!error1) {
+                document.getElementById('stat-total').textContent = allBookings?.length || 0;
+            }
 
             // Сегодня
             const today = new Date().toISOString().split('T')[0];
@@ -448,10 +466,13 @@
             document.getElementById('stat-today').textContent = todayCount;
 
             // Активные агенты
-            const { data: agents } = await supabase
+            const { data: agents, error: error2 } = await supabase
                 .from('agents')
                 .select('id');
-            document.getElementById('stat-agents').textContent = agents?.length || 0;
+            
+            if (!error2) {
+                document.getElementById('stat-agents').textContent = agents?.length || 0;
+            }
 
             // Занятые места (сегодня)
             const occupiedToday = bookings.filter(b => b.booking_date === today).length;
