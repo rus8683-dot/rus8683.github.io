@@ -407,10 +407,7 @@
         const SUPABASE_URL = 'https://ftrkosudfbdhzsfpqklf.supabase.co'; // Замените на ваш Project URL
         const SUPABASE_KEY = 'ftrkosudfbdhzsfpqklf'; // Замените на ваш anon/public key
         
-        const supabase = window.supabase.create({
-            url: SUPABASE_URL,
-            key: SUPABASE_KEY
-        });
+        const supabase = = createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // === ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ===
         let currentAgent = null;
