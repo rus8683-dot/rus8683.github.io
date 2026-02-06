@@ -18,6 +18,7 @@
             color: #333;
             line-height: 1.6;
             padding: 20px;
+            min-height: 100vh;
         }
 
         .container {
@@ -87,6 +88,7 @@
             font-weight: 500;
             background: white;
             cursor: pointer;
+            min-width: 200px;
         }
 
         .slots-grid {
@@ -103,16 +105,16 @@
             padding: 25px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
 
-        .slot-card:hover {
+        .slot-card:hover:not(.full) {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             border-color: #667eea;
         }
 
-        .slot-card.booked {
+        .slot-card.full {
             background: #fef2f2;
             border-color: #fca5a5;
             cursor: not-allowed;
@@ -141,12 +143,12 @@
             margin-top: 10px;
         }
 
-        .slot-card:not(.booked) .slot-seats {
+        .slot-card:not(.full) .slot-seats {
             background: #dbeafe;
             color: #1e40af;
         }
 
-        .slot-card.booked .slot-seats {
+        .slot-card.full .slot-seats {
             background: #fecaca;
             color: #b91c1c;
         }
@@ -156,7 +158,24 @@
             color: white;
         }
 
-        /* Форма бронирования */
+        .progress-container {
+            margin-top: 15px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
         #booking-form {
             background: #f1f5f9;
             padding: 35px;
@@ -201,7 +220,7 @@
         }
 
         .form-group input,
-        .form-group select {
+        .form-group textarea {
             width: 100%;
             padding: 14px;
             border: 2px solid #cbd5e1;
@@ -209,13 +228,57 @@
             font-size: 16px;
             background: white;
             transition: border-color 0.3s;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
         }
 
         .form-group input:focus,
-        .form-group select:focus {
+        .form-group textarea:focus {
             outline: none;
             border-color: #667eea;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .seats-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid #cbd5e1;
+        }
+
+        .seats-selector button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #cbd5e1;
+            background: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .seats-selector button:hover:not(:disabled) {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .seats-selector button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .seats-count {
+            font-size: 1.5rem;
+            font-weight: bold;
+            min-width: 40px;
+            text-align: center;
         }
 
         .submit-btn {
@@ -232,7 +295,7 @@
             margin-top: 10px;
         }
 
-        .submit-btn:hover {
+        .submit-btn:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
         }
@@ -265,7 +328,36 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Footer */
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         footer {
             text-align: center;
             padding: 25px;
@@ -274,7 +366,12 @@
             font-size: 0.95rem;
         }
 
-        /* Адаптивность */
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
         @media (max-width: 768px) {
             .date-picker {
                 flex-direction: column;
@@ -292,34 +389,14 @@
             header h1 {
                 font-size: 2rem;
             }
-        }
-
-        /* Loading spinner */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s linear infinite;
-            margin-right: 10px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .btn-loading {
-            position: relative;
-            padding-left: 40px !important;
-        }
-
-        .btn-loading .loading {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
+            
+            .slots-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-group textarea {
+                min-height: 80px;
+            }
         }
     </style>
 </head>
@@ -328,7 +405,7 @@
         <header>
             <h1>📅 Система бронирования</h1>
             <div class="agent-info" id="agent-display">
-                Загрузка...
+                Загрузка системы...
             </div>
         </header>
 
@@ -341,18 +418,23 @@
                     <input type="date" id="booking-date">
                 </div>
 
+                <div class="error-message" id="error-message"></div>
+
                 <div class="slots-grid" id="slots-container">
-                    <!-- Слоты будут загружаться сюда -->
+                    <div style="text-align: center; padding: 40px; color: #64748b;">
+                        Выберите дату для отображения доступных слотов
+                    </div>
                 </div>
             </div>
 
             <div class="section">
                 <div id="booking-form">
-                    <h2 class="form-title">📝 Заполните данные клиента</h2>
+                    <h2 class="form-title" id="form-title">📝 Заполните данные клиента</h2>
                     
                     <input type="hidden" id="selected-slot">
                     <input type="hidden" id="agent-code">
                     <input type="hidden" id="agent-name">
+                    <input type="hidden" id="agent-id">
                     
                     <div class="form-row">
                         <div class="form-group">
@@ -371,8 +453,8 @@
                             <input type="text" id="client-address" placeholder="г. Москва, ул. Тверская, 10">
                         </div>
                         <div class="form-group">
-                            <label for="client-birthdate">🎂 Дата рождения</label>
-                            <input type="date" id="client-birthdate">
+                            <label for="client-notes">📝 Заметки</label>
+                            <textarea id="client-notes" placeholder="Дополнительная информация о клиенте, пожелания, комментарии..."></textarea>
                         </div>
                     </div>
 
@@ -381,7 +463,22 @@
                         <input type="text" id="agent-display-form" readonly style="background: #e2e8f0;">
                     </div>
 
-                    <button class="submit-btn" id="submit-booking">Забронировать место</button>
+                    <div class="form-group">
+                        <label>🎟 Количество мест *</label>
+                        <div class="seats-selector">
+                            <button type="button" id="decrease-seats" disabled>-</button>
+                            <div class="seats-count" id="seats-count">1</div>
+                            <button type="button" id="increase-seats">+</button>
+                            <div style="margin-left: auto; color: #64748b;">
+                                Доступно: <span id="available-seats" style="font-weight: bold;">0</span> мест
+                            </div>
+                        </div>
+                        <input type="hidden" id="selected-seats" value="1">
+                    </div>
+
+                    <button class="submit-btn" id="submit-booking">
+                        Забронировать место
+                    </button>
 
                     <div class="success-message" id="success-message">
                         ✅ Отлично! Бронирование успешно создано!
@@ -391,7 +488,7 @@
         </div>
 
         <footer>
-            <p>© 2026 Система бронирования. Все права защищены.</p>
+            <p>© 2024 Система бронирования. Все права защищены.</p>
             <p style="margin-top: 8px;">
                 <strong>Админ-панель:</strong> 
                 <a href="admin.html" style="color: #667eea; text-decoration: none; font-weight: 600;">
@@ -403,84 +500,114 @@
 
     <script>
         // === НАСТРОЙКИ SUPABASE ===
-        // ЗАМЕНИТЕ ЭТИ ЗНАЧЕНИЯ НА СВОИ ИЗ ПРОЕКТА SUPABASE!
         const SUPABASE_URL = 'https://ftrkosudfbdhzsfpqklf.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0cmtvc3VkZmJkaHpzZnBxa2xmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg4NDQ2MDMsImV4cCI6MjA1NDQyMDYwM30.YOUR_ACTUAL_KEY_HERE';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ0cmtvc3VkZmJkaHpzZnBxa2xmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg4NDQ2MDMsImV4cCI6MjA1NDQyMDYwM30.LPcYFVk_R8IKemG4uQ8RszOjWbBfjxXr1h3RQ6ZRJdU';
         
-        // Правильное подключение через CDN
+        // Создаем клиент Supabase
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
+        
         // === ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ===
         let currentAgent = null;
         let selectedDate = null;
         let selectedSlot = null;
-
+        let selectedSlotTime = '';
+        const maxSeats = 6;
+        
         // === ИНИЦИАЛИЗАЦИЯ ===
         document.addEventListener('DOMContentLoaded', async () => {
-            console.log('Страница загружена');
+            console.log('🚀 Система бронирования запускается...');
             
-            // Получаем код агента из URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const agentCode = urlParams.get('agent') || 'ivanov';
-            console.log('Код агента:', agentCode);
-            
-            // Загружаем данные агента
-            await loadAgentData(agentCode);
-            
-            // Настраиваем календарь
-            setupDatePicker();
-            
-            // Загружаем слоты на сегодня
-            await loadSlotsForDate(selectedDate);
-            
-            // Обработчики событий
-            setupEventListeners();
+            try {
+                // Получаем код агента из URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const agentCode = urlParams.get('agent');
+                
+                if (!agentCode) {
+                    showError('❌ Укажите код агента в URL: index.html?agent=КОД_АГЕНТА');
+                    document.getElementById('agent-display').innerHTML = 
+                        '<span style="color: #ef4444;">❌ Ошибка: укажите код агента в URL</span><br>' +
+                        'Пример: index.html?agent=ivanov<br>' +
+                        'Если агентов нет, добавьте их через админ-панель';
+                    return;
+                }
+                
+                console.log(`👤 Загружаем агента с кодом: ${agentCode}`);
+                
+                // Загружаем данные агента
+                await loadAgentData(agentCode);
+                
+                // Настраиваем календарь
+                setupDatePicker();
+                
+                // Настраиваем обработчики событий
+                setupEventListeners();
+                
+                // Загружаем слоты на выбранную дату
+                await loadSlotsForDate(selectedDate);
+                
+                console.log('✅ Система готова к работе');
+                
+            } catch (error) {
+                console.error('❌ Ошибка инициализации:', error);
+                showError('❌ Ошибка загрузки системы');
+            }
         });
-
+        
         // === ФУНКЦИИ ===
-
+        
         // Загрузка данных агента
         async function loadAgentData(agentCode) {
             try {
-                console.log('Загрузка агента с кодом:', agentCode);
+                console.log(`🔍 Поиск агента ${agentCode} в базе...`);
                 
                 const { data, error } = await supabase
                     .from('agents')
                     .select('*')
                     .eq('code', agentCode)
                     .single();
-
+                        
                 if (error) {
-                    console.error('Ошибка Supabase:', error);
-                    throw error;
+                    console.error('❌ Агент не найден:', error);
+                    showError(`❌ Агент с кодом "${agentCode}" не найден в системе.`);
+                    document.getElementById('agent-display').innerHTML = 
+                        `<span style="color: #ef4444;">❌ Агент "${agentCode}" не найден</span><br>` +
+                        `Проверьте код агента или добавьте его через <a href="admin.html">админ-панель</a>`;
+                    return;
                 }
-
+                
                 currentAgent = data;
-                console.log('Агент загружен:', currentAgent);
+                console.log(`✅ Агент найден: ${currentAgent.name}`);
                 
                 // Отображаем информацию об агенте
-                document.getElementById('agent-display').textContent = 
-                    `👤 Агент: ${currentAgent.name} | 📞 ${currentAgent.phone}`;
+                document.getElementById('agent-display').innerHTML = 
+                    `<div><strong>👤 Агент:</strong> ${currentAgent.name}</div>
+                     <div><strong>📞 Телефон:</strong> ${currentAgent.phone}</div>
+                     <div><strong>🔑 Код:</strong> ${currentAgent.code}</div>`;
                 
                 document.getElementById('agent-code').value = currentAgent.code;
                 document.getElementById('agent-name').value = currentAgent.name;
+                document.getElementById('agent-id').value = currentAgent.id;
                 document.getElementById('agent-display-form').value = 
                     `${currentAgent.name} (${currentAgent.phone})`;
-                
+                    
             } catch (error) {
-                console.error('Ошибка загрузки агента:', error);
-                document.getElementById('agent-display').textContent = 
-                    `❌ Ошибка: агент не найден (${agentCode})`;
+                console.error('❌ Ошибка загрузки агента:', error);
+                showError('❌ Ошибка загрузки данных агента');
             }
         }
-
+        
         // Настройка календаря
         function setupDatePicker() {
             const today = new Date();
-            const minDate = today.toISOString().split('T')[0];
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
             
-            const maxDate = new Date();
-            maxDate.setFullYear(today.getFullYear() + 3);
+            // Устанавливаем минимальную дату (завтра)
+            const minDate = tomorrow.toISOString().split('T')[0];
+            
+            // Устанавливаем максимальную дату (через 3 месяца)
+            const maxDate = new Date(today);
+            maxDate.setMonth(maxDate.getMonth() + 3);
             const maxDateStr = maxDate.toISOString().split('T')[0];
             
             const datePicker = document.getElementById('booking-date');
@@ -489,251 +616,400 @@
             datePicker.value = minDate;
             selectedDate = minDate;
             
-            console.log('Дата календаря установлена:', selectedDate);
-            
-            datePicker.addEventListener('change', async (e) => {
-                selectedDate = e.target.value;
-                console.log('Выбрана новая дата:', selectedDate);
-                await loadSlotsForDate(selectedDate);
-                hideForm();
-            });
+            console.log(`📅 Дата по умолчанию: ${selectedDate}`);
         }
-
+        
         // Загрузка слотов на выбранную дату
         async function loadSlotsForDate(date) {
+            const container = document.getElementById('slots-container');
+            
+            if (!date) {
+                console.log('📅 Дата не выбрана');
+                return;
+            }
+            
+            if (!currentAgent) {
+                console.log('❌ Агент не загружен, не могу загрузить слоты');
+                return;
+            }
+            
             try {
-                console.log('Загрузка слотов на дату:', date);
+                console.log(`📊 Загрузка слотов на дату: ${date}`);
                 
-                // Получаем все бронирования на эту дату
-                const {  bookings, error } = await supabase
+                container.innerHTML = '<div style="text-align: center; padding: 40px; color: #64748b;">Загрузка слотов...</div>';
+                hideError();
+                
+                // Получаем ВСЕ бронирования на эту дату (включая seats_count)
+                const { data: bookings, error } = await supabase
                     .from('bookings')
-                    .select('slot_time')
+                    .select('slot_time, seats_count')
                     .eq('booking_date', date);
-
+                    
                 if (error) {
-                    console.error('Ошибка Supabase при загрузке слотов:', error);
+                    console.error('❌ Ошибка загрузки бронирований:', error);
                     throw error;
                 }
-
-                console.log('Получено бронирований:', bookings ? bookings.length : 0);
-
-                // Считаем количество бронирований в каждом слоте
+                
+                console.log(`📊 Получено бронирований: ${bookings ? bookings.length : 0}`);
+                
+                // Считаем количество занятых мест в каждом слоте
                 const slotCounts = { morning: 0, afternoon: 0, evening: 0 };
                 
-                if (bookings) {
+                if (bookings && bookings.length > 0) {
                     bookings.forEach(booking => {
-                        if (slotCounts[booking.slot_time] !== undefined) {
-                            slotCounts[booking.slot_time]++;
+                        if (booking.slot_time && slotCounts.hasOwnProperty(booking.slot_time)) {
+                            // Используем seats_count если есть, иначе 1
+                            const seats = booking.seats_count || 1;
+                            slotCounts[booking.slot_time] += seats;
                         }
                     });
                 }
-
-                console.log('Счётчики слотов:', slotCounts);
-
-                // Рендерим слоты
+                
+                console.log('🎯 Итоговые данные по слотам:', slotCounts);
+                
+                // Отображаем слоты
                 renderSlots(slotCounts, date);
                 
             } catch (error) {
-                console.error('Ошибка загрузки слотов:', error);
-                alert('Ошибка при загрузке данных. Попробуйте позже.');
+                console.error('❌ Ошибка загрузки слотов:', error);
+                showError('❌ Ошибка загрузки слотов');
+                container.innerHTML = '<div style="text-align: center; padding: 40px; color: #ef4444;">Ошибка загрузки данных</div>';
             }
         }
-
+        
         // Отображение слотов
         function renderSlots(slotCounts, date) {
             const container = document.getElementById('slots-container');
+            
+            if (!container) {
+                console.error('❌ Контейнер слотов не найден');
+                return;
+            }
+            
             container.innerHTML = '';
-
+            
             const slots = [
                 {
                     id: 'morning',
                     time: '9:00 — 12:00',
                     label: 'Утро',
-                    booked: slotCounts.morning,
-                    total: 6
+                    booked: slotCounts.morning || 0,
+                    total: maxSeats,
+                    color: '#3b82f6'
                 },
                 {
                     id: 'afternoon',
                     time: '12:00 — 16:00',
                     label: 'День',
-                    booked: slotCounts.afternoon,
-                    total: 6
+                    booked: slotCounts.afternoon || 0,
+                    total: maxSeats,
+                    color: '#10b981'
                 },
                 {
                     id: 'evening',
                     time: '16:00 — 20:00',
                     label: 'Вечер',
-                    booked: slotCounts.evening,
-                    total: 6
+                    booked: slotCounts.evening || 0,
+                    total: maxSeats,
+                    color: '#8b5cf6'
                 }
             ];
-
-            console.log('Рендер слотов:', slots);
-
+            
             slots.forEach(slot => {
-                const remaining = slot.total - slot.booked;
+                const remaining = Math.max(0, slot.total - slot.booked);
                 const isFull = remaining <= 0;
-                const isBookedToday = slot.booked > 0;
-
+                const percentage = Math.min(100, (slot.booked / slot.total) * 100);
+                
                 const slotCard = document.createElement('div');
-                slotCard.className = `slot-card ${isFull ? 'booked' : ''}`;
+                slotCard.className = `slot-card ${isFull ? 'full' : ''}`;
+                slotCard.dataset.slotId = slot.id;
+                slotCard.dataset.remaining = remaining;
+                
                 slotCard.innerHTML = `
                     <div class="slot-time">${slot.time}</div>
-                    <div class="slot-label" style="font-size: 1.2rem; margin-bottom: 15px; color: #64748b;">
+                    <div style="font-size: 1.2rem; margin-bottom: 15px; color: #64748b;">
                         ${slot.label}
                     </div>
                     <div class="slot-seats">
-                        ${isFull ? '⚠️ Мест нет' : `🕗 Осталось: ${remaining} из ${slot.total}`}
+                        ${isFull ? '⚠️ Мест нет' : `✅ Осталось: ${remaining} из ${slot.total}`}
                     </div>
-                    ${isBookedToday && !isFull ? 
-                        `<div style="margin-top: 10px; font-size: 0.9rem; color: #1e40af;">
-                            📊 Забронировано: ${slot.booked}
-                        </div>` : ''}
+                    <div class="progress-container">
+                        <div style="margin-top: 10px; font-size: 0.9rem; color: #475569;">
+                            Забронировано: <strong>${slot.booked}</strong> мест
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${percentage}%; background: ${isFull ? '#ef4444' : slot.color};"></div>
+                        </div>
+                        ${remaining > 0 ? 
+                            `<div style="margin-top: 5px; font-size: 0.85rem; color: #10b981;">
+                                Можно забронировать до ${remaining} мест
+                            </div>` : 
+                            `<div style="margin-top: 5px; font-size: 0.85rem; color: #ef4444;">
+                                Слот полностью заполнен
+                            </div>`
+                        }
+                    </div>
                 `;
-
-                if (!isFull) {
-                    slotCard.addEventListener('click', () => selectSlot(slot.id, slot.time, remaining));
+                
+                if (!isFull && currentAgent) {
+                    slotCard.addEventListener('click', (e) => {
+                        console.log(`🎯 Выбран слот: ${slot.id} (${slot.time})`);
+                        selectSlot(slot.id, slot.time, remaining, e);
+                    });
+                } else {
+                    slotCard.style.cursor = 'not-allowed';
                 }
-
+                
                 container.appendChild(slotCard);
             });
-        }
-
-        // Выбор слота
-        function selectSlot(slotId, slotTime, remaining) {
-            console.log('Выбран слот:', slotId, slotTime);
             
-            // Убираем выделение с других слотов
+            console.log(`✅ Слоты отображены для даты: ${date}`);
+        }
+        
+        // Выбор слота
+        function selectSlot(slotId, slotTime, remaining, event) {
+            if (!currentAgent) {
+                showError('❌ Агент не загружен');
+                return;
+            }
+            
+            // Сбрасываем предыдущий выбор
             document.querySelectorAll('.slot-card').forEach(card => {
                 card.classList.remove('selected');
             });
-
+            
             // Выделяем выбранный слот
             event.currentTarget.classList.add('selected');
             
             // Сохраняем выбранный слот
             selectedSlot = slotId;
+            selectedSlotTime = slotTime;
             document.getElementById('selected-slot').value = slotId;
             
+            // Обновляем выбор количества мест
+            updateSeatsSelector(remaining);
+            
             // Показываем форму
-            showForm(slotTime, remaining);
+            showForm();
         }
-
+        
+        // Обновление выбора количества мест
+        function updateSeatsSelector(remaining) {
+            const seatsCount = document.getElementById('seats-count');
+            const selectedSeats = document.getElementById('selected-seats');
+            const availableSeats = document.getElementById('available-seats');
+            const decreaseBtn = document.getElementById('decrease-seats');
+            const increaseBtn = document.getElementById('increase-seats');
+            
+            // Устанавливаем доступное количество мест
+            availableSeats.textContent = remaining;
+            
+            // Сбрасываем счетчик на 1
+            let currentSeats = 1;
+            seatsCount.textContent = currentSeats;
+            selectedSeats.value = currentSeats;
+            
+            // Обновляем состояние кнопок
+            decreaseBtn.disabled = currentSeats <= 1;
+            increaseBtn.disabled = currentSeats >= remaining;
+            
+            // Обработчики кнопок
+            decreaseBtn.onclick = () => {
+                if (currentSeats > 1) {
+                    currentSeats--;
+                    seatsCount.textContent = currentSeats;
+                    selectedSeats.value = currentSeats;
+                    decreaseBtn.disabled = currentSeats <= 1;
+                    increaseBtn.disabled = currentSeats >= remaining;
+                }
+            };
+            
+            increaseBtn.onclick = () => {
+                if (currentSeats < remaining) {
+                    currentSeats++;
+                    seatsCount.textContent = currentSeats;
+                    selectedSeats.value = currentSeats;
+                    decreaseBtn.disabled = currentSeats <= 1;
+                    increaseBtn.disabled = currentSeats >= remaining;
+                }
+            };
+        }
+        
         // Показать форму
-        function showForm(slotTime, remaining) {
+        function showForm() {
             const form = document.getElementById('booking-form');
+            const formTitle = document.getElementById('form-title');
+            
+            // Обновляем заголовок формы
+            formTitle.textContent = `📝 Бронирование на ${formatDate(selectedDate)}, ${selectedSlotTime}`;
+            
+            // Показываем форму
             form.classList.add('visible');
             
-            // Скроллим к форме
+            // Плавный скролл к форме
             form.scrollIntoView({ behavior: 'smooth', block: 'start' });
             
-            // Можно добавить информацию о слоте в форму
-            const formTitle = form.querySelector('.form-title');
-            formTitle.textContent = `📝 Бронирование на ${formatDate(selectedDate)}, ${slotTime}`;
+            // Скрываем сообщение об ошибке
+            hideError();
         }
-
+        
         // Скрыть форму
         function hideForm() {
-            document.getElementById('booking-form').classList.remove('visible');
+            const form = document.getElementById('booking-form');
+            form.classList.remove('visible');
+            
+            // Сбрасываем выбор слотов
             document.querySelectorAll('.slot-card').forEach(card => {
                 card.classList.remove('selected');
             });
+            
+            // Скрываем сообщения
             document.getElementById('success-message').classList.remove('show');
+            
+            selectedSlot = null;
+            selectedSlotTime = '';
         }
-
+        
         // Настройка обработчиков событий
         function setupEventListeners() {
-            document.getElementById('submit-booking').addEventListener('click', submitBooking);
+            console.log('⚙️ Настройка обработчиков событий...');
+            
+            // Обработчик изменения даты
+            const datePicker = document.getElementById('booking-date');
+            if (datePicker) {
+                datePicker.addEventListener('change', async function(e) {
+                    console.log(`📅 Выбрана новая дата: ${e.target.value}`);
+                    selectedDate = e.target.value;
+                    await loadSlotsForDate(selectedDate);
+                    hideForm();
+                });
+            }
+            
+            // Обработчик отправки формы
+            const submitBtn = document.getElementById('submit-booking');
+            if (submitBtn) {
+                submitBtn.addEventListener('click', submitBooking);
+            }
+            
+            // Валидация телефона в реальном времени
+            const phoneInput = document.getElementById('client-phone');
+            if (phoneInput) {
+                phoneInput.addEventListener('input', function(e) {
+                    let value = e.target.value.replace(/\D/g, '');
+                    if (value.startsWith('7') || value.startsWith('8')) {
+                        value = value.substring(1);
+                    }
+                    if (value.length > 0) {
+                        value = '+7 (' + value.substring(0, 3) + ') ' + value.substring(3, 6) + '-' + value.substring(6, 8) + '-' + value.substring(8, 10);
+                    }
+                    e.target.value = value;
+                });
+            }
         }
-
+        
         // Отправка бронирования
         async function submitBooking() {
             const submitBtn = document.getElementById('submit-booking');
             const successMsg = document.getElementById('success-message');
-
+            
+            if (!currentAgent) {
+                alert('❌ Агент не загружен');
+                return;
+            }
+            
             // Валидация
             const clientName = document.getElementById('client-name').value.trim();
             const clientPhone = document.getElementById('client-phone').value.trim();
-
+            const seats = parseInt(document.getElementById('selected-seats').value);
+            const remaining = parseInt(document.getElementById('available-seats').textContent);
+            
             if (!clientName || clientName.length < 2) {
-                alert('Пожалуйста, введите корректное имя клиента');
+                alert('❌ Введите корректное имя клиента (минимум 2 символа)');
                 return;
             }
-
-            if (!clientPhone || !/^\+7\s?\(?\d{3}\)?\s?\d{3}-?\d{2}-?\d{2}$/.test(clientPhone.replace(/\s/g, ''))) {
-                alert('Пожалуйста, введите корректный телефон (+7)');
+            
+            // Валидация телефона
+            const phoneRegex = /^[\+]?[7|8][\s]?\(?\d{3}\)?[\s]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/;
+            if (!clientPhone || !phoneRegex.test(clientPhone.replace(/\s/g, ''))) {
+                alert('❌ Введите корректный телефон (+7/8 XXX XXX-XX-XX)');
                 return;
             }
-
+            
+            // Проверяем, выбран ли слот
+            if (!selectedSlot) {
+                alert('❌ Выберите время для бронирования');
+                return;
+            }
+            
+            // Проверяем, что количество мест корректно
+            if (seats < 1 || seats > remaining) {
+                alert(`❌ Можно забронировать от 1 до ${remaining} мест`);
+                return;
+            }
+            
             // Блокируем кнопку
             submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="loading"></span>Отправляю...';
-            submitBtn.classList.add('btn-loading');
-
+            submitBtn.innerHTML = '<span class="loading"></span>Бронирую...';
+            
             try {
-                console.log('Отправка бронирования:', {
+                // Создаем бронирование
+                const bookingData = {
                     agent_id: currentAgent.id,
                     agent_code: currentAgent.code,
                     client_name: clientName,
                     client_phone: clientPhone,
+                    client_address: document.getElementById('client-address').value.trim() || null,
+                    client_notes: document.getElementById('client-notes').value.trim() || null,
                     booking_date: selectedDate,
-                    slot_time: selectedSlot
-                });
-
-                // Отправляем данные в базу
+                    slot_time: selectedSlot,
+                    seats_count: seats,
+                    created_at: new Date().toISOString()
+                };
+                
+                console.log('📤 Отправка данных в Supabase:', bookingData);
+                
                 const { data, error } = await supabase
                     .from('bookings')
-                    .insert([
-                        {
-                            agent_id: currentAgent.id,
-                            agent_code: currentAgent.code,
-                            client_name: clientName,
-                            client_phone: clientPhone,
-                            client_address: document.getElementById('client-address').value.trim() || null,
-                            client_birthdate: document.getElementById('client-birthdate').value || null,
-                            booking_date: selectedDate,
-                            slot_time: selectedSlot
-                        }
-                    ])
+                    .insert([bookingData])
                     .select();
-
+                    
                 if (error) {
-                    console.error('Ошибка Supabase при вставке:', error);
+                    console.error('❌ Ошибка Supabase при сохранении:', error);
                     throw error;
                 }
-
-                console.log('Бронирование создано:', data);
-
+                
+                console.log('✅ Бронирование сохранено:', data);
+                
                 // Показываем сообщение об успехе
+                successMsg.innerHTML = `✅ Отлично! Забронировано ${seats} ${getPluralForm(seats, ['место', 'места', 'мест'])} на ${selectedSlotTime}!`;
                 successMsg.classList.add('show');
                 
-                // Очищаем форму через 2 секунды
+                // Обновляем слоты через 1 секунду
+                setTimeout(async () => {
+                    await loadSlotsForDate(selectedDate);
+                }, 1000);
+                
+                // Очищаем форму через 3 секунды
                 setTimeout(() => {
                     document.getElementById('client-name').value = '';
                     document.getElementById('client-phone').value = '';
                     document.getElementById('client-address').value = '';
-                    document.getElementById('client-birthdate').value = '';
+                    document.getElementById('client-notes').value = '';
                     
-                    // Обновляем слоты
-                    loadSlotsForDate(selectedDate);
-                    
-                    // Скрываем форму через 3 секунды
-                    setTimeout(() => {
-                        hideForm();
-                    }, 3000);
-                }, 2000);
-
+                    successMsg.classList.remove('show');
+                    hideForm();
+                }, 3000);
+                
             } catch (error) {
-                console.error('Ошибка бронирования:', error);
-                alert('Ошибка при создании бронирования. Попробуйте ещё раз.');
+                console.error('❌ Ошибка бронирования:', error);
+                alert('❌ Ошибка при создании бронирования');
             } finally {
-                // Разблокируем кнопку
+                // Восстанавливаем кнопку
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = 'Забронировать место';
-                submitBtn.classList.remove('btn-loading');
             }
         }
-
+        
         // Форматирование даты
         function formatDate(dateString) {
             const date = new Date(dateString);
@@ -743,6 +1019,24 @@
                 month: 'long',
                 day: 'numeric'
             });
+        }
+        
+        // Показать ошибку
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('show');
+        }
+        
+        // Скрыть ошибку
+        function hideError() {
+            document.getElementById('error-message').classList.remove('show');
+        }
+        
+        // Функция для получения правильной формы множественного числа
+        function getPluralForm(number, forms) {
+            const cases = [2, 0, 1, 1, 1, 2];
+            return forms[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[Math.min(number % 10, 5)]];
         }
     </script>
 </body>
