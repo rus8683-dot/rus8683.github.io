@@ -624,11 +624,14 @@
         // Загрузка агентов в фильтр
         async function loadAgents() {
             try {
-                const { data, error } = await supabase
-                    .from('agents')
-                    .select('agent_code, agent_name')
-                    .eq('is_active', true)
-                    .order('agent_name');
+               const { data, error } = await supabase
+    .from('bookings')
+    .select(`
+        *,
+        agents!inner(agent_name, agent_phone)
+    `)
+    .order('booking_date', { ascending: false })
+    .order('created_at', { ascending: false });
                 
                 if (error) throw error;
                 
