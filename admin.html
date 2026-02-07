@@ -628,10 +628,14 @@
 
     <script>
         // === НАСТРОЙКИ SUPABASE ===
-        const SUPABASE_URL = 'https://womuzjdraudsdoccvsyb.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_RH2zcaIzRNPcJ8-cvb2ZEA_eRO0Whdv';
+        const SUPABASE_URL = 'https://tiwtotwshzyhqbnxwyru.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRpd3RvdHdzaHp5aHFibnh3eXJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA0NTQ5NjcsImV4cCI6MjA4NjAzMDk2N30.GIJQkMmRQ7jXX_lg-_Mdixus-f4I-IZGBYdH3m3Ti4U';
         
-
+        const supabase = supabase.create({
+            url: SUPABASE_URL,
+            key: SUPABASE_KEY
+        });
+        
         let allBookings = [];
         
         // Проверка подключения
