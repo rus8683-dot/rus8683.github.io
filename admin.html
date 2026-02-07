@@ -719,3 +719,142 @@
     </script>
 </body>
 </html>
+/* МОБИЛЬНАЯ ВЕРСИЯ */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 10px 0;
+    }
+    
+    .main-content {
+        margin-left: 0;
+        padding: 10px;
+    }
+    
+    .sidebar .logo {
+        padding: 15px;
+        font-size: 1.2em;
+        text-align: center;
+    }
+    
+    .nav-section {
+        display: none; /* Скрываем по умолчанию */
+        margin-bottom: 10px;
+    }
+    
+    .nav-section.active {
+        display: block;
+    }
+    
+    .nav-section h3 {
+        display: none;
+    }
+    
+    .nav-item {
+        padding: 10px 15px;
+        text-align: center;
+        border-left: none;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    header {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+    
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    
+    .stat-card {
+        padding: 15px;
+    }
+    
+    .stat-value {
+        font-size: 1.8em;
+    }
+    
+    .filters-section {
+        padding: 15px;
+    }
+    
+    .filters-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .btn-group {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    th, td {
+        padding: 8px 10px;
+        font-size: 0.9em;
+    }
+    
+    .action-btn {
+        display: block;
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    
+    /* Мобильное меню */
+    .mobile-menu-toggle {
+        display: block;
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        background: #2a5298;
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        z-index: 1000;
+        cursor: pointer;
+    }
+}
+
+/* Очень маленькие экраны */
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stat-card {
+        padding: 12px;
+    }
+    
+    .stat-value {
+        font-size: 1.5em;
+    }
+    
+    th, td {
+        padding: 6px 8px;
+        font-size: 0.85em;
+    }
+    
+    footer {
+        font-size: 0.8em;
+        padding: 15px;
+    }
+}
